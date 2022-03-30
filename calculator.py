@@ -89,6 +89,8 @@ def input_num_list(menu):
     if menu != "5" and len(b) == 0:
       print("input second number")
       continue
+    elif menu == "5" and len(b) != 0:
+      flag = False
     elif len(b) == 0:
       flag = False
     elif str_to_int(b) == False:
