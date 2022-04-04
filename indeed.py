@@ -5,7 +5,7 @@ LIMIT = 50
 SEARCH_CONDITION = "/jobs?q=python&limit="
 INDEED_URL = "https://kr.indeed.com"
 
-def extract_indeed_pages():
+def get_last_page():
   result = requests.get(INDEED_URL + SEARCH_CONDITION + str(LIMIT))
 
   soup = BeautifulSoup(result.text, "html.parser")
@@ -27,12 +27,12 @@ def extract_job(html):
   title = html.find("h2",{"class":"jobTitle"}).find_all("span")[-1].string
   company_name = html.find("span",{"class":"companyName"}).string
   company_location = html.find("div",{"class":"companyLocation"}).string
-  direct_url = html['href']
+  link = html['href']
   
-  return {'title' : title, 'company_name' : company_name, 'company_location' : company_location, 'direct_url' : INDEED_URL + direct_url}
+  return {'title' : title, 'company_name' : company_name, 'company_location' : company_location, 'link' : INDEED_URL + link}
   
 
-def extract_indeed_jobs(last_page):
+def extract_jobs(last_page):
 
   jobs = []
   
@@ -46,5 +46,10 @@ def extract_indeed_jobs(last_page):
         jobs.append(extract_job(html))
       except:
         continue
-  print(jobs)
   return jobs
+
+def get_jobs():
+  last_page = get_last_page()
+  jobs = extract_jobs(last_page)
+  return jobs
+  
